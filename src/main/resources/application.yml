@@ -1,0 +1,26 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: wisdom-classroom
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///wisdom_classroom?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password:
+  mvc:
+    pathmatch:
+      # 解决springboot2.6与swagger不兼容的问题
+      matching-strategy: ANT_PATH_MATCHER
+
+
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      logic-delete-field: isDeleted
+
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zyc.wc.mapper.DeviceFaultMapper">
+
+    <select id="selectByCondition" parameterType="cn.zyc.wc.vo.DeviceFaultVo" resultType="cn.zyc.wc.vo.DeviceFaultVo">
+      SELECT tdf.id,tdf.time,tdf.classroom_id,tc.classname as classroom_name,
+        tdf.device_id,td.device_name,
+        tdf.feedback_teacher_id,tt.`name` as feedback_teacher_name,
+        tdf.fault_type,tdf.detail,
+        tdf.handle_person_id,tt2.`name` as handle_person_name,
+        tdf.handle_time,tdf.handle_state
+        FROM t_device_fault tdf
+        LEFT JOIN t_classroom tc ON tdf.classroom_id=tc.id
+        LEFT JOIN t_device td ON tdf.device_id=td.device_id
+        LEFT JOIN t_teacher tt ON tdf.feedback_teacher_id = tt.id
+        LEFT JOIN t_teacher tt2 ON tdf.handle_person_id = tt2.id
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+          <if test="time != null">
+              AND DATE(`time`) = #{time}
+          </if>
+            <if test="classroomId != null">
+                AND `classroom_id` = #{classroomId}
+            </if>
+            <if test="classroomName != null">
+                AND tc.classname LIKE "%"#{classroomName}"%"
+            </if>
+            <if test="deviceId != null">
+                AND `device_id` LIKE "%"#{deviceId}"%"
+            </if>
+            <if test="deviceName != null">
+                AND `device_name` LIKE "%"#{deviceName}"%"
+            </if>
+            <if test="feedbackTeacherId != null">
+                AND `feedback_teacher_id` = #{feedbackTeacherId}
+            </if>
+            <if test="feedbackTeacherName != null">
+                AND tt.`name` LIKE "%"#{feedbackTeacherName}"%"
+            </if>
+            <if test="faultType != null">
+                AND `fault_type` = #{faultType}
+            </if>
+            <if test="handlePersonId != null">
+                AND `handlePersonId` = #{handle_person_id}
+            </if>
+            <if test="handlePersonName != null">
+                AND tt2.`name` LIKE "%"#{handlePersonName}"%"
+            </if>
+            <if test="handleTime != null">
+                AND `handle_time` = #{handleTime}
+            </if>
+            <if test="handleState != null">
+                AND `handle_state` = #{handleState}
+            </if>
+        </where>
+        ORDER BY `time` DESC
+    </select>
+
+</mapper>

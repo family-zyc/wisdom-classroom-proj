@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zyc.wc.mapper.TeacherClassroomMapper">
+
+
+    <select id="teacherClassroomVoListByCondition" parameterType="cn.zyc.wc.vo.TeacherClassroomQueryVo" resultType="cn.zyc.wc.vo.TeacherClassroomVo">
+      SELECT ttc.id,ttc.classroom_id,tc.classname,
+        ttc.teacher_id,tt.username as teacher_name,
+        ttc.date,tssw.`week`,ttc.day_of_week,ttc.start_phase,ttc.end_phase,
+        ttc.detail,ttc.handle_state,tt.telephone as teacher_phone
+        FROM t_teacher_classroom as ttc
+        LEFT JOIN t_classroom as tc on ttc.classroom_id=tc.id
+        LEFT JOIN t_teacher as tt on ttc.teacher_id=tt.id
+        LEFT JOIN t_school_schedule_week as tssw
+        on (ttc.date between tssw.start_date and tssw.end_date)
+
+        <where>
+          <if test="classId != null">
+            AND `classroom_id` = #{classId}
+          </if>
+          <if test="classname != null">
+            AND classname LIKE "%"#{classname}"%"
+          </if>
+          <if test="teacherId != null">
+            AND `teacher_id` = #{teacherId}
+          </if>
+          <if test="teacherName != null">
+            AND tt.username LIKE "%"#{teacherName}"%"
+          </if>
+          <if test="date != null">
+            AND `date` = #{date}
+          </if>
+          <if test="week != null">
+            AND `week` = #{week}
+          </if>
+          <if test="dayOfWeek != null">
+            AND `day_of_week` = #{dayOfWeek}
+          </if>
+          <if test="startPhase != null">
+            AND `start_phase` &gt;= #{startPhase}
+          </if>
+          <if test="endPhase != null">
+            AND `end_phase` &lt;= #{endPhase}
+          </if>
+          <if test="handleState != null">
+            AND `handle_state` = #{handleState}
+          </if>
+        </where>
+        ORDER BY `date` DESC
+    </select>
+
+    <select id="checkClassConflict" resultType="long">
+      SELECT COUNT(*) FROM t_teacher_classroom
+      WHERE `date` = #{localDate}
+      AND ((`start_phase` between #{startPhase} and #{endPhase})
+       OR (`end_phase` between #{startPhase} and #{endPhase})
+       )
+      AND `handle_state` = 1
+
+    </select>
+
+
+
+</mapper>
