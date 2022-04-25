@@ -2,4 +2,43 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.zyc.wc.mapper.DeviceMapper">
 
+    <select id="selectForCondition" parameterType="cn.zyc.wc.vo.DeviceQueryVo" resultType="cn.zyc.wc.vo.DeviceVo">
+        SELECT td.device_id,td.device_name,td.device_image,
+        td.classroom_id,tc.classname as classroomName,
+        td.buy_date,td.fix_size,
+        td.device_type,tdt.device_type as device_type_name,
+        td.is_disable
+        FROM t_device td
+        LEFT JOIN t_classroom tc ON td.classroom_id=tc.id
+        LEFT JOIN t_device_type tdt ON td.device_type=tdt.id
+        <where>
+          td.is_deleted = 0
+          <if test="deviceId != null">
+              AND device_id LIKE "%"#{deviceId}"%"
+          </if>
+            <if test="deviceName != null">
+                AND device_name LIKE "%"#{deviceName}"%"
+            </if>
+            <if test="classroomName != null">
+                AND tc.classname LIKE "%"#{classroomName}"%"
+            </if>
+            <if test="buyDate != null">
+                AND buy_date = #{buyDate}
+            </if>
+            <if test="fixSize != null">
+                AND fix_size >= #{fixSize}
+            </if>
+            <if test="deviceType != null">
+                AND td.device_type >= #{deviceType}
+            </if>
+            <if test="isDisable != null and isDisable">
+                AND is_disable = 1
+            </if>
+            <if test="isDisable != null and !isDisable">
+                AND is_disable = 0
+            </if>
+
+        </where>
+    </select>
+
 </mapper>

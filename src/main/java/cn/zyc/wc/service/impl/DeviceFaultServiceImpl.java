@@ -40,7 +40,7 @@ public class DeviceFaultServiceImpl extends ServiceImpl<DeviceFaultMapper, Devic
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public boolean handlerState(int id, int handleState) throws WisdomException {
         // 如果成功，顺便将该设备的状态改为可使用
         boolean deviceResult = true;
@@ -48,9 +48,11 @@ public class DeviceFaultServiceImpl extends ServiceImpl<DeviceFaultMapper, Devic
             // 查询设备id
             DeviceFault deviceFault = this.getById(id);
             String deviceId = deviceFault.getDeviceId();
-            // 修改设备的状态
+            // 修改设备的状态,添加设备修改次数
+            Device device = deviceServiceImpl.getOne(new QueryWrapper<Device>().lambda().eq(Device::getDeviceId, deviceId));
             UpdateWrapper<Device> deviceWrapper = new UpdateWrapper<>();
-            deviceWrapper.lambda().eq(Device::getDeviceId,deviceId).set(Device::getIsDisable,false);
+            deviceWrapper.lambda().eq(Device::getDeviceId,device.getDeviceId()).set(Device::getIsDisable,false)
+            .set(Device::getFixSize,device.getFixSize() + 1);
             deviceResult = deviceServiceImpl.update(deviceWrapper);
 
         }
@@ -67,9 +69,8 @@ public class DeviceFaultServiceImpl extends ServiceImpl<DeviceFaultMapper, Devic
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public boolean applyDeviceFault(DeviceFault deviceFault) throws WisdomException {
-        // Todo 1.判断有没有类似的报修,有则拒绝申请 2.将设备状态改为不可用
         // 判断有没有类似的报修,有则拒绝申请
         QueryWrapper<DeviceFault> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(DeviceFault::getClassroomId,deviceFault.getClassroomId())

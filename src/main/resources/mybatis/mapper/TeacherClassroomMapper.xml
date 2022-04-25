@@ -15,6 +15,7 @@
         on (ttc.date between tssw.start_date and tssw.end_date)
 
         <where>
+          ttc.is_deleted=0
           <if test="classId != null">
             AND `classroom_id` = #{classId}
           </if>

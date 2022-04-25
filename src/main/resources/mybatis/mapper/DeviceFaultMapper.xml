@@ -15,6 +15,7 @@
         LEFT JOIN t_teacher tt ON tdf.feedback_teacher_id = tt.id
         LEFT JOIN t_teacher tt2 ON tdf.handle_person_id = tt2.id
         <where>
+          tdf.is_deleted = 0
             <if test="id != null">
                 AND id = #{id}
             </if>
@@ -42,10 +43,10 @@
             <if test="faultType != null">
                 AND `fault_type` = #{faultType}
             </if>
-            <if test="handlePersonId != null">
-                AND `handlePersonId` = #{handle_person_id}
+            <if test="handlePersonId != null ">
+                AND `handlePersonId` = #{handlePersonId}
             </if>
-            <if test="handlePersonName != null">
+            <if test="handlePersonName != null and handlePersonName != ''">
                 AND tt2.`name` LIKE "%"#{handlePersonName}"%"
             </if>
             <if test="handleTime != null">
