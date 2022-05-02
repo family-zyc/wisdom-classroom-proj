@@ -47,8 +47,6 @@ public class TeacherController {
 
         Teacher teacherPo = new Teacher();
         BeanUtils.copyProperties(teacherVo,teacherPo);
-        // fill token
-        teacherPo.setToken(JwtUtil.sign(teacherPo.getUsername(),teacherPo.getPassword()));
         // password by Md5 encryption
         teacherPo.setPassword(DigestUtils.md5DigestAsHex(teacherPo.getPassword().getBytes()));
         boolean result = teacherServiceImpl.save(teacherPo);

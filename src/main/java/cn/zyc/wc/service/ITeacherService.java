@@ -4,6 +4,7 @@ import cn.zyc.wc.exception.WisdomException;
 import cn.zyc.wc.po.Teacher;
 import cn.zyc.wc.vo.UserVo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * <p>
@@ -15,5 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITeacherService extends IService<Teacher> {
 
-    String login(UserVo userVo) throws WisdomException;
+    String login(UserVo userVo) throws WisdomException, JsonProcessingException;
 }

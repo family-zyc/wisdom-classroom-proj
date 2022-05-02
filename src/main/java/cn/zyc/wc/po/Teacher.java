@@ -39,7 +39,7 @@ public class Teacher implements Serializable {
     private String avatar;
 
     @ApiModelProperty("权限：1普通教师，2管理员")
-    private Integer rule;
+    private Integer role;
 
     @ApiModelProperty("教师名字")
     private String name;
@@ -100,13 +100,34 @@ public class Teacher implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-    public Integer getRule() {
-        return rule;
+
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", token='" + token + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", role=" + role +
+                ", name='" + name + '\'' +
+                ", gender=" + gender +
+                ", age=" + age +
+                ", telephone='" + telephone + '\'' +
+                ", isDeleted=" + isDeleted +
+                ", gmtCreate=" + gmtCreate +
+                ", gmtModified=" + gmtModified +
+                '}';
     }
 
-    public void setRule(Integer rule) {
-        this.rule = rule;
+    public Integer getRole() {
+        return role;
     }
+
+    public void setRole(Integer role) {
+        this.role = role;
+    }
+
     public String getName() {
         return name;
     }
@@ -157,22 +178,4 @@ public class Teacher implements Serializable {
         this.gmtModified = gmtModified;
     }
 
-    @Override
-    public String toString() {
-        return "Teacher{" +
-            "id=" + id +
-            ", username=" + username +
-            ", password=" + password +
-            ", token=" + token +
-            ", avatar=" + avatar +
-            ", rule=" + rule +
-            ", name=" + name +
-            ", gender=" + gender +
-            ", age=" + age +
-            ", telephone=" + telephone +
-            ", isDeleted=" + isDeleted +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-        "}";
-    }
 }

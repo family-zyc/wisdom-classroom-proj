@@ -27,6 +27,11 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
+        log.info("updateFill--gmtModified");
+        // 将gmtModified设置为null，避免从mybatis中查询出来的对象，再进行更新自动填充失败
+        if(metaObject.hasSetter("GMT_MODIFIED")){
+            metaObject.setValue("GMT_MODIFIED",null);
+        }
         this.strictUpdateFill(metaObject, "gmtModified", () -> LocalDateTime.now(), LocalDateTime.class);
     }
 }

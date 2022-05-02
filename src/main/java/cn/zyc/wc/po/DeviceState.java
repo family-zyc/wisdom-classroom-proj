@@ -33,8 +33,6 @@ public class DeviceState implements Serializable {
     @ApiModelProperty("开机时间")
     private LocalDateTime startupTime;
 
-    @ApiModelProperty("运行时间")
-    private LocalTime runTime;
 
     @ApiModelProperty("音量")
     private Integer volume;
@@ -66,13 +64,6 @@ public class DeviceState implements Serializable {
     public void setStartupTime(LocalDateTime startupTime) {
         this.startupTime = startupTime;
     }
-    public LocalTime getRunTime() {
-        return runTime;
-    }
-
-    public void setRunTime(LocalTime runTime) {
-        this.runTime = runTime;
-    }
     public Integer getVolume() {
         return volume;
     }
@@ -101,7 +92,6 @@ public class DeviceState implements Serializable {
             "id=" + id +
             ", deviceId=" + deviceId +
             ", startupTime=" + startupTime +
-            ", runTime=" + runTime +
             ", volume=" + volume +
             ", windSpeed=" + windSpeed +
             ", currentState=" + currentState +

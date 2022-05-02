@@ -13,6 +13,11 @@ spring:
     pathmatch:
       # 解决springboot2.6与swagger不兼容的问题
       matching-strategy: ANT_PATH_MATCHER
+  redis:
+    host: 192.168.118.130
+    port: 6379
+    username:
+    password:
 
 
 mybatis-plus:

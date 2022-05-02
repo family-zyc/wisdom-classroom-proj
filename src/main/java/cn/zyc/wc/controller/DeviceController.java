@@ -13,12 +13,22 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.swagger.annotations.ApiModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Driver;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +78,7 @@ public class DeviceController {
     @PostMapping("/crud")
     public R save(@RequestBody Device device) throws WisdomException {
 
+
         boolean result = deviceServiceImpl.saveDevice(device);
         return result?R.ok().build():R.fail().message("保存失败").build();
     }
@@ -77,5 +88,23 @@ public class DeviceController {
         boolean result = deviceServiceImpl.removeByDeviceId(deviceId);
         return result? R.ok().build():R.fail().message("删除失败").build();
     }
+
+    @GetMapping("/test/httpClient")
+    public void test () throws IOException {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("http://localhost:8888/device/crud/1/10");
+        CloseableHttpResponse httpResponse = httpclient.execute(httpGet);
+        if(httpResponse.getStatusLine().getStatusCode() == 200){
+            HttpEntity entity = httpResponse.getEntity();
+            log.info("test()--entity--{}",entity);
+            String result = EntityUtils.toString(entity);
+            log.info("test()--result--{}",result);
+
+        }else{
+            log.info("test()--{}","出错了");
+        }
+
+    }
+
 
 }
